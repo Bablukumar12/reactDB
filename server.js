@@ -99,7 +99,6 @@ app.put("/products/:id", function (req, res) {
 
 app.get("/purchases", (req, res) => {
 	let { shop, product, sort } = req.query;
-
 	connection.query("select * from purchases", (err, data) => {
 		if (err) console.log(err);
 		else {
@@ -114,21 +113,13 @@ app.get("/purchases", (req, res) => {
 							let products = result.rows;
 							let arr1 = [...purchases];
 							if (shop) {
-								let id = +shops.find((s) => s.name === shop).shopid;
-								arr1 = arr1.filter((a) => a.shopid === +id);
+								arr1 = arr1.filter((a) => a.shopid === +shop);
 							}
 							if (product) {
-								productArray = product.split(",");
-								let ids = products.reduce(
-									(acc, curr) =>
-										productArray.find((p) => p === curr.productname)
-											? [...acc, curr.productid]
-											: acc,
-									[]
-								);
-								console.log(ids);
+								let ids = product.split(",");
+
 								arr1 = arr1.filter(
-									(a) => ids.findIndex((i) => i === a.productid) >= 0
+									(a) => ids.findIndex((i) => i == a.productid) >= 0
 								);
 							}
 							if (sort) {
